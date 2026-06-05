@@ -1,0 +1,10 @@
+# Claim-to-Evidence Table (Track 3)
+
+Fill frame numbers from your captures and parser output.
+
+| Claim | Strengthening Evidence (Frame Nos + Fields) | Evidence-Based Explanation | Result That Weakens / Contradicts | Scope / Limitation Note |
+|---|---|---|---|---|
+| SSID appears in unprotected pre-association management traffic. | Baseline/modified Beacon (`0x0008`), Probe (`0x0004/0x0005`), Assoc Request (`0x0000`); `wlan.ssid` visible in Wireshark and `frames.csv`. | Supports observation that SSID is visible in management traffic before key-establishment evidence. | SSID does not appear in relevant pre-association management frames in captured evidence. | Visibility is shown for tested client/AP/channel conditions only. |
+| Same SSID is advertised by multiple BSSIDs, and client-selected BSSID is observable. | Modified capture shows AP1 and AP2 Beacon frames with same `wlan.ssid` and different `wlan.bssid`; client Authentication/Assoc frames (`0x000b`, `0x0000`) identify selected BSSID. | Supports wording: same SSID advertised by multiple BSSIDs and client-selected BSSID. | Modified capture lacks both AP beacons for same SSID, or auth/assoc frames are missing/ambiguous. | Selection behavior may differ across devices, roaming logic, and signal conditions. |
+| In this WPA2-PSK setup, client proceeds through auth/assoc before EAPOL key-establishment evidence appears. | Ordered sequence in filtered capture and `frames.csv`: `0x000b -> 0x0000/0x0001 -> eapol` for selected BSSID. | Supports observed ordering of connection stages in this setup. | Client rejects AP before association with explicit protocol-level identity mismatch evidence. | This does not prove all clients always connect; it shows observed sequence in this lab. |
+| Conclusions remain evidence-based and bounded by scope. | Claim text + packet table + `claim_summary.json` + limitations section explicitly separate observation from inference. | Prevents over-claiming and matches Assignment 2 grading emphasis. | Report makes universal claims beyond collected frame evidence. | No claim is made about untested modes (e.g., WPA3 variants) without additional data. |
