@@ -14,7 +14,7 @@
 \usepackage{enumitem}
 \usepackage{tabularx}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning}
+\usetikzlibrary{arrows.meta, positioning, calc}
 
 \onehalfspacing
 
@@ -227,22 +227,35 @@ The security question tested is whether, in our WPA2-PSK lab setup, the client's
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    node distance=1.6cm,
-    box/.style={draw, rounded corners, align=center, minimum width=3.2cm, minimum height=0.9cm},
-    arrow/.style={-Latex, thick}
+    box/.style={draw, rounded corners, align=center, minimum width=3.3cm, minimum height=0.95cm, font=\small},
+    arrow/.style={-Latex, thick},
+    darrow/.style={-Latex, thick, dashed}
 ]
-\node[box] (ap1) {AP1 (Real Router)\\SSID Michal\_2.4\\BSSID d6:35:1d:9f:89:fc};
-\node[box, right=3.2cm of ap1] (ap2) {AP2 (Tenda USB)\\Same SSID + WPA2\\BSSID c8:3a:35:c2:e0:b7};
-\node[box, below=2cm of ap1] (client) {Client Phone\\32:0a:af:e3:81:b2};
-\node[box, below=2cm of ap2] (mon) {Monitor (EDUP USB)\\wlxe84e06aed7c8\\passive capture};
-\node[box, below=1.2cm of client] (vm) {Ubuntu VM (VirtualBox)\\lab\_cli.py wizard};
+% Top row: two APs with wide spacing
+\node[box] (ap1) at (0, 0) {AP1 (Real Router)\\SSID Michal\_2.4\\BSSID d6:35:1d:9f:89:fc};
+\node[box] (ap2) at (8.5, 0) {AP2 (Tenda USB)\\Same SSID + WPA2\\BSSID c8:3a:35:c2:e0:b7};
 
-\draw[arrow] (client) -- node[above, sloped] {Wi-Fi} (ap1);
-\draw[arrow] (client) -- node[above, sloped] {Wi-Fi} (ap2);
-\draw[dashed, arrow] (mon) -- node[right] {802.11 sniff} (ap1);
-\draw[dashed, arrow] (mon) -- node[left] {802.11 sniff} (ap2);
-\draw[arrow] (vm) -- (mon);
-\draw[arrow] (vm) -- node[right] {hostapd + dnsmasq} (ap2);
+% Client centered below APs
+\node[box] (client) at (4.25, -2.8) {Client Phone\\32:0a:af:e3:81:b2};
+
+% Monitor to the right of client
+\node[box] (mon) at (8.5, -2.8) {Monitor (EDUP USB)\\wlxe84e06aed7c8\\passive capture};
+
+% VM below client (left side, away from crossing arrows)
+\node[box] (vm) at (1.2, -5.2) {Ubuntu VM (VirtualBox)\\lab\_cli.py wizard};
+
+% Client Wi-Fi to each AP (separate angles, labels outside)
+\draw[arrow] (client.north west) -- node[midway, left=3mm] {Wi-Fi} (ap1.south);
+\draw[arrow] (client.north east) -- node[midway, right=3mm] {Wi-Fi} (ap2.south);
+
+% Monitor passive sniff: curved paths so labels do not overlap
+\draw[darrow] (mon.north) -- node[midway, right=2mm] {sniff} (ap2.south);
+\draw[darrow] (mon.west) .. controls (6.0, -1.2) and (2.0, -1.2) .. (ap1.south)
+    node[midway, above=2mm] {sniff};
+
+% VM control paths (no crossing over Wi-Fi arrows)
+\draw[arrow] (vm.north east) -| node[near start, right] {capture} (mon.south);
+\draw[arrow] (vm.east) -- node[midway, above, sloped] {hostapd + dnsmasq} (ap2.south west);
 \end{tikzpicture}
 \caption{Lab topology. AP1 is the legitimate home router. AP2 is a controlled rogue-condition AP on a Tenda USB adapter. The EDUP adapter captures management and EAPOL frames in monitor mode.}
 \end{figure}
