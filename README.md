@@ -17,7 +17,9 @@ Ariel University, Department of Computer Science
 The final **PDF report** (`report.pdf`) is submitted separately by email.  
 This repository is the **reproducibility package** (code, captures, parser output, figures, LaTeX source).
 
-GitHub ZIP download: `https://github.com/Alizalazar9/wpa2-ssid-investigation/archive/refs/heads/main.zip`
+Repository: [https://github.com/OrBibi/wpa2-ssid-investigation](https://github.com/OrBibi/wpa2-ssid-investigation)
+
+GitHub ZIP download: `https://github.com/OrBibi/wpa2-ssid-investigation/archive/refs/heads/main.zip`
 
 ---
 
