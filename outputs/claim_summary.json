@@ -1,0 +1,22 @@
+{
+  "total_records": 414,
+  "target_ssid": "Michal_2.4",
+  "ap1_bssid": "d6:35:1d:9f:89:fc",
+  "ap2_bssid": "c8:3a:35:c2:e0:b7",
+  "counts_by_phase": {
+    "discovery": 385,
+    "other": 10,
+    "key_exchange": 9,
+    "auth_assoc": 10
+  },
+  "ssid_visible_pre_assoc": false,
+  "same_ssid_advertised_by_multiple_bssids": false,
+  "selected_bssid_from_auth_assoc": [
+    "c8:3a:35:c2:e0:b7"
+  ],
+  "eapol_seen": true,
+  "notes": [
+    "This summary reports observed frame-level evidence only.",
+    "It does not claim universal behavior beyond captured lab conditions."
+  ]
+}

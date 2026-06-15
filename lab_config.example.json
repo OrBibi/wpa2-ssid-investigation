@@ -1,0 +1,12 @@
+{
+  "target_ssid": "",
+  "ap1_bssid": "",
+  "ap2_bssid": "",
+  "client_mac": "",
+  "monitor_iface": "",
+  "ap2_iface": "",
+  "wpa_passphrase": "",
+  "channel": 6,
+  "capture_dir": "captures",
+  "output_dir": "outputs"
+}
