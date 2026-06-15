@@ -101,6 +101,53 @@ All conclusions are evidence-based observations from our controlled lab captures
 
 ---
 
+## Opening PCAP Files
+
+Frame numbers cited in the report and `figures/` refer to the **filtered** captures unless noted otherwise.
+
+### Wireshark (GUI)
+
+From the repository root:
+
+```bash
+# Linux VM without DISPLAY set (VirtualBox desktop session):
+DISPLAY=:0 wireshark captures/track3_filtered_baseline_authorized_only.pcapng
+DISPLAY=:0 wireshark captures/track3_filtered_modified_authorized_only.pcapng
+```
+
+Or open Wireshark → **File → Open** → select a file under `captures/`.
+
+On Windows/macOS, install [Wireshark](https://www.wireshark.org/download.html) and open the `.pcapng` files directly (no `DISPLAY` needed).
+
+### TShark (command line, no GUI)
+
+```bash
+# List key frames in modified capture (client auth/assoc/eapol to AP2)
+tshark -r captures/track3_filtered_modified_authorized_only.pcapng \
+  -Y "wlan.addr==32:0a:af:e3:81:b2 && (eapol || wlan.fc.type_subtype in {0x000b,0x0000,0x0001})" \
+  -T fields -e frame.number -e wlan.fc.type_subtype -e wlan.bssid
+
+# Jump to a specific frame (example: EAPOL message 1, frame 75)
+tshark -r captures/track3_filtered_modified_authorized_only.pcapng \
+  -Y "frame.number==75" -V
+```
+
+### Useful display filters
+
+| Goal | Filter |
+|------|--------|
+| Beacons for target SSID | `wlan.ssid == "Michal_2.4" && wlan.fc.type_subtype == 0x0008` |
+| Client traffic only | `wlan.addr == 32:0a:af:e3:81:b2` |
+| Auth to AP2 (modified) | `frame.number == 68` |
+| Assoc to AP2 (modified) | `frame.number == 71` |
+| EAPOL handshake (modified) | `frame.number >= 75 && frame.number <= 78` |
+| Baseline probe | `frame.number == 16` (baseline filtered) |
+| Baseline EAPOL to AP1 | `frame.number == 17` (baseline filtered) |
+
+**Tip:** Use the **filtered** PCAPs for report frame numbers. Raw captures contain the same events but with different frame numbers.
+
+---
+
 ## Install Dependencies
 
 ```bash
